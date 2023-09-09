@@ -1,0 +1,21 @@
+name: OpenTelemetry Export Trace
+
+on:
+  workflow_run:
+    workflows:
+      - "project cicd flow"
+    types: [completed]
+
+jobs:
+  otel-export-trace:
+    name: OpenTelemetry Export Trace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: export trace
+        uses: ./
+        with:
+          otlpEndpoint: grpc://api.honeycomb.io:443/
+          otlpHeaders: ${{ secrets.DELIVERY_OTLP_HEADERS }}
+          githubToken: ${{ secrets.GITHUB_TOKEN1 }}
+          runId: ${{ github.event.workflow_run.id }}
