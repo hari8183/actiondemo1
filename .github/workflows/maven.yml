@@ -24,7 +24,12 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install
-
+    - uses: inception-health/otel-upload-test-artifact-action@latest
+      if: always()
+      with:
+          jobName: "build"
+          stepName: "Build with Maven"
+          githubToken: ${{ secrets.GITHUB_TOKEN }}  
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
       with:
